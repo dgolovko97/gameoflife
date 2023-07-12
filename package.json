@@ -8,7 +8,8 @@
     "start": "npx webpack serve",
     "build": "NODE_ENV=production webpack",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "chromatic": "npx chromatic --project-token=chpt_86d3cbc903abfb0"
   },
   "engines": {
     "node": ">=18.0.0"
