@@ -1,8 +1,11 @@
 module.exports = {
   clearMocks: true,
   coverageDirectory: "coverage",
-  testEnvironment: "node",
+  testEnvironment: "jsdom",
   transform: {
-    "^.+\\.(js|jsx|ts|tsx)$": "<rootDir>/node_modules/babel-jest",
+    "^.+\\.(js|jsx|ts|tsx)$": "babel-jest",
+  },
+  moduleNameMapper: {
+    "^.+\\.(css|less|scss)$": "babel-jest",
   },
 };
