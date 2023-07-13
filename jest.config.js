@@ -8,4 +8,6 @@ module.exports = {
   moduleNameMapper: {
     "^.+\\.(css|less|scss)$": "babel-jest",
   },
+  collectCoverage: true,
+  coverageReporters: ["json", "html"],
 };
