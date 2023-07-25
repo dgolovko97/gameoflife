@@ -2,3 +2,5 @@ node_modules
 dist
 .idea
 coverage
+# stryker temp files
+.stryker-tmp
