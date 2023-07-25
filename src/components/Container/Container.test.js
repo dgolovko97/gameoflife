@@ -61,4 +61,54 @@ describe("Container", () => {
 
     expect(boardChildren).toHaveLength(8000);
   });
+  it("Container Clear", () => {
+    render(<Container />);
+
+    fireEvent.click(screen.getByTestId("btn-clear"));
+
+    expect(screen.getByTestId("numberfield-element")).toHaveTextContent(
+      /Clear/
+    );
+    expect(screen.getByTestId("btn-clear")).toHaveClass("active");
+  });
+  it("Container Run", () => {
+    render(<Container />);
+
+    fireEvent.click(screen.getByTestId("btn-run"));
+
+    expect(screen.getByTestId("numberfield-element")).toHaveTextContent(
+      /Running/
+    );
+    expect(screen.getByTestId("btn-run")).toHaveClass("active");
+  });
+  it("Container Pause", () => {
+    render(<Container />);
+
+    expect(screen.getByTestId("btn-pause")).toHaveClass("active");
+
+    fireEvent.click(screen.getByTestId("btn-clear"));
+    fireEvent.click(screen.getByTestId("btn-pause"));
+
+    expect(screen.getByTestId("numberfield-element")).toHaveTextContent(
+      /Pause/
+    );
+
+    fireEvent.click(screen.getByTestId("btn-pause"));
+    expect(screen.getByTestId("numberfield-element")).toHaveTextContent(
+      /Pause/
+    );
+  });
+
+  it("Container game over", () => {
+    render(<Container />);
+
+    fireEvent.click(screen.getByTestId("btn-run"));
+
+    setTimeout(() => {
+      expect(screen.getByTestId("btn-pause")).toHaveClass("active");
+      expect(screen.getByTestId("numberfield-element")).toHaveTextContent(
+        /Game Over/
+      );
+    }, 1500);
+  });
 });

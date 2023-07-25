@@ -6,7 +6,7 @@ module.exports = {
     "^.+\\.(js|jsx|ts|tsx)$": "babel-jest",
   },
   moduleNameMapper: {
-    "^.+\\.(css|less|scss)$": "babel-jest",
+    "^.+\\.(css|less|scss)$": "identity-obj-proxy",
   },
   collectCoverage: true,
   coverageReporters: ["json", "html"],
