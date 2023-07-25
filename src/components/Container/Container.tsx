@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Board } from "../Board/Board";
+import Board from "../Board/Board";
 import { Button } from "../Button/Button";
 import s from "./Container.modules.scss";
 import global_s from "../../style.modules.scss";
@@ -9,7 +9,7 @@ type boardSizeType = {
   height: number;
 };
 type sizeButtonsType = boardSizeType & { name: string };
-type eventButtonsType = "Run" | "Pause" | "Stop";
+export type eventButtonsType = "Run" | "Pause" | "Clear" | "End";
 export const Container = () => {
   const sizeButtons: sizeButtonsType[] = [
     {
@@ -28,14 +28,16 @@ export const Container = () => {
       name: "100x80",
     },
   ];
-  const eventButtons: eventButtonsType[] = ["Run", "Pause", "Stop"];
   const [boardSize, setBoardSize] = useState<boardSizeType>({
     width: 50,
     height: 30,
   });
+  const [currentGameAction, setCurrentGameAction] =
+    useState<eventButtonsType>("Pause");
   const [activeSizeButton, setActiveSizeButton] =
     useState<sizeButtonsType["name"]>("50x30");
-  const [activeActionsButton, setActiveActionsButton] = useState<string>("");
+  const [activeActionsButton, setActiveActionsButton] =
+    useState<string>("Pause");
   const handleSetBoardSize = (
     event: React.SyntheticEvent<HTMLButtonElement>
   ) => {
@@ -48,17 +50,39 @@ export const Container = () => {
     });
     setActiveSizeButton(event.target.name);
   };
-
-  const handleSetAction = (event: React.SyntheticEvent<HTMLButtonElement>) => {
-    if (!(event.target instanceof HTMLButtonElement)) {
+  const handleClear = (event: React.SyntheticEvent<HTMLButtonElement>) => {
+    if (currentGameAction === "Clear") {
       return;
     }
-    setActiveActionsButton(event.target.name);
-    alert("Функционал в разработке");
+    setInfoField("Clear");
+    setCurrentGameAction("Clear");
+    setActiveActionsButton((event.target as HTMLButtonElement).name);
+  };
+  const handleRun = (event: React.SyntheticEvent<HTMLButtonElement>) => {
+    if (currentGameAction === "Run") {
+      return;
+    }
+    setInfoField("Running...");
+    setCurrentGameAction("Run");
+    setActiveActionsButton((event.target as HTMLButtonElement).name);
   };
 
-  const [squareNumber, setSquareNumber] = useState<number | null>(null);
-  const getSquareNumber = (number: number) => setSquareNumber(number);
+  const handlePause = (event: React.SyntheticEvent<HTMLButtonElement>) => {
+    if (currentGameAction === "Pause") {
+      return;
+    }
+    setInfoField("Pause");
+    setCurrentGameAction("Pause");
+    setActiveActionsButton((event.target as HTMLButtonElement).name);
+  };
+
+  const handleGameOver = (): void => {
+    setCurrentGameAction("Pause");
+    setActiveActionsButton("Pause");
+    setInfoField("Game Over :(");
+  };
+
+  const [infoField, setInfoField] = useState<string | number>(0);
 
   return (
     <div className={s.container} data-testid="container-element">
@@ -79,27 +103,45 @@ export const Container = () => {
         })}
       </div>
       <div className={`${s["board-actions"]} ${global_s.mb}`}>
-        {eventButtons.map((name) => {
-          return (
-            <Button
-              onClick={handleSetAction}
-              name={name}
-              key={name}
-              className={name === activeActionsButton ? "active" : ""}
-            >
-              {name}
-            </Button>
-          );
-        })}
+        <Button
+          onClick={handleRun}
+          name="Run"
+          className={"Run" === activeActionsButton ? "active" : ""}
+          data-testid="btn-run"
+        >
+          Run
+        </Button>
+        <Button
+          onClick={handlePause}
+          name="Pause"
+          className={"Pause" === activeActionsButton ? "active" : ""}
+          data-testid="btn-pause"
+        >
+          Pause
+        </Button>
+        <Button
+          onClick={handleClear}
+          name="Clear"
+          className={"Clear" === activeActionsButton ? "active" : ""}
+          data-testid="btn-clear"
+        >
+          Clear
+        </Button>
       </div>
-      <Board {...boardSize} getSquareNumber={getSquareNumber} />
       <br />
       <div
         style={{ color: "white", fontSize: 24 }}
         data-testid="numberfield-element"
       >
-        {squareNumber}
+        {infoField}
       </div>
+      <br />
+      <Board
+        {...boardSize}
+        getSquareNumber={setInfoField}
+        handleGameOver={handleGameOver}
+        currentGameAction={currentGameAction}
+      />
     </div>
   );
 };

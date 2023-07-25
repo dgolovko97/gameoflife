@@ -1,5 +1,6 @@
 import React from "react";
 import { Button } from "./Button";
+import {} from "../Square/Square";
 export default {
   title: "Button",
   component: Button,
