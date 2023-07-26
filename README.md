@@ -9,11 +9,11 @@
 
 
 Навигация:
-- [Установка](#Установка)
-- [Запуск](#Запуск)
-- [Медиа](#Медиа)
+- [Установка](#installation)
+- [Запуск](#getting-started)
+- [Медиа](#media)
 
-## Установка
+## Installation
 
 Склонируйте репозиторий на свой компьютер.
 
@@ -21,13 +21,13 @@
 ```
 npm install
 ```
-## Запуск
+## Getting Started
 Запустите проект локально
 ```
 npm run start
 ```
 
-## Медиа
+## Media
 <p align="center">
 <a href="https://imgbb.com/"><img src="https://i.ibb.co/FwQcYVm/scrnli-7-26-2023-2-26-45-PM-online-video-cutter-com-Adobe-Express-1.gif" alt="scrnli-7-26-2023-2-26-45-PM-online-video-cutter-com-Adobe-Express-1" border="0"></a>
 </p>
