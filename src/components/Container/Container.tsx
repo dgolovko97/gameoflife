@@ -3,6 +3,7 @@ import Board from "../Board/Board";
 import { Button } from "../Button/Button";
 import s from "./Container.modules.scss";
 import global_s from "../../style.modules.scss";
+import { CBoard } from "../Board/CBoard";
 
 type boardSizeType = {
   width: number;
@@ -38,6 +39,7 @@ export const Container = () => {
     useState<sizeButtonsType["name"]>("50x30");
   const [activeActionsButton, setActiveActionsButton] =
     useState<string>("Pause");
+  const [showBoard, setShowBoard] = useState(true);
   const handleSetBoardSize = (
     event: React.SyntheticEvent<HTMLButtonElement>
   ) => {
@@ -80,6 +82,10 @@ export const Container = () => {
     setCurrentGameAction("Pause");
     setActiveActionsButton("Pause");
     setInfoField("Game Over :(");
+  };
+
+  const handleDeleteBoard = () => {
+    setShowBoard(!showBoard);
   };
 
   const [infoField, setInfoField] = useState<string | number>(0);
@@ -127,6 +133,14 @@ export const Container = () => {
         >
           Clear
         </Button>
+        <Button
+          onClick={handleDeleteBoard}
+          name="Clear"
+          className={"Clear" === activeActionsButton ? "active" : ""}
+          data-testid="btn-clear"
+        >
+          {showBoard ? "Delete" : "Show"} Board
+        </Button>
       </div>
       <br />
       <div
@@ -136,12 +150,14 @@ export const Container = () => {
         {infoField}
       </div>
       <br />
-      <Board
-        {...boardSize}
-        getSquareNumber={setInfoField}
-        handleGameOver={handleGameOver}
-        currentGameAction={currentGameAction}
-      />
+      {showBoard && (
+        <CBoard
+          {...boardSize}
+          getSquareNumber={setInfoField}
+          handleGameOver={handleGameOver}
+          currentGameAction={currentGameAction}
+        />
+      )}
     </div>
   );
 };
