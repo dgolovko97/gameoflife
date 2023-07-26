@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./style.modules.scss";
 import { Container } from "./components/Container/Container";
-import { store } from "./Redux/store.ts";
+import { store } from "./redux/store.ts";
 import { Provider } from "react-redux";
 
 const container: HTMLElement | null = document.getElementById("root");

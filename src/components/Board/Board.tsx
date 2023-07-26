@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from "react";
 import s from "./Board.modules.scss";
 import { useSelector } from "react-redux";
-import { State } from "../../Redux/rootReducer";
+import { State } from "../../redux/rootReducer";
 import { Square } from "../Square/Square";
 
 export type NeighbourPosition =

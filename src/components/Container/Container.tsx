@@ -1,16 +1,21 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useEffect } from "react";
 import s from "./Container.modules.scss";
 import global_s from "../../style.modules.scss";
 import { Button } from "../Button/Button";
 import { Board } from "../Board/Board";
 import { useDispatch, useSelector } from "react-redux";
-import { State } from "../../Redux/rootReducer";
+import { State } from "../../redux/rootReducer";
+import { getHistoryListThunk } from "../../thunk/thunkData";
 
 export const Container: FunctionComponent = () => {
   const dispatch = useDispatch();
-  const { activeSizeButton, textInfo, gameAction } = useSelector(
-    (state: State) => state
-  );
+  const {
+    activeSizeButton,
+    textInfo,
+    gameAction,
+    loadingHistory,
+    historyInfo,
+  } = useSelector((state: State) => state);
   const handleSetBoardSize = (
     event: React.SyntheticEvent<HTMLButtonElement>
   ) => {
@@ -44,6 +49,9 @@ export const Container: FunctionComponent = () => {
       dispatch({ type: "SET_INTERVAL_ID", payload: { timerId: id } });
     }
   };
+  useEffect(() => {
+    dispatch(getHistoryListThunk());
+  }, []);
   return (
     <div className={s.container} data-testid="container-element">
       <div className={`${s["set-board-size"]} ${global_s.mb}`}>
@@ -110,6 +118,13 @@ export const Container: FunctionComponent = () => {
       </div>
       <br />
       <Board />
+      <br />{" "}
+      <div
+        style={{ color: "white", fontSize: 24 }}
+        data-testid="numberfield-element"
+      >
+        {loadingHistory ? "LOADING..." : historyInfo}
+      </div>
     </div>
   );
 };

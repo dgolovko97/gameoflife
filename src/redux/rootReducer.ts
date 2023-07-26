@@ -8,6 +8,7 @@ const SQUARE_SIZE_PX = 10;
 const DEFAULT_WIDTH = 50;
 const DEFAULT_HEIGHT = 30;
 export type State = {
+  loadingHistory: boolean;
   board: boolean[];
   isFirstRender: boolean;
   neighbours: Neighbour[];
@@ -22,6 +23,7 @@ export type State = {
   activeSizeButton: string;
   gameAction: gameAction;
   hashCode: number[];
+  historyInfo: string;
 };
 export type gameAction = "Run" | "Pause" | "Clear";
 type Action<T extends string, P> = {
@@ -42,6 +44,8 @@ type SetIntervalId = Action<
   "SET_INTERVAL_ID",
   { timerId: NodeJS.Timer | number }
 >;
+type LoadingHistory = Action<"LOADING_HISTORY", { loadingType: string }>;
+type GetHistoryList = Action<"GET_HISTORY_LIST", { data: string[] }>;
 
 type Actions =
   | SetBoard
@@ -50,6 +54,8 @@ type Actions =
   | SetGameAction
   | Update
   | SetIntervalId
+  | LoadingHistory
+  | GetHistoryList
   | GameOver;
 
 const initSizeBoard = (width: number, height: number): boolean[] => {
@@ -57,6 +63,7 @@ const initSizeBoard = (width: number, height: number): boolean[] => {
 };
 
 const initialState: State = {
+  loadingHistory: false,
   board: initSizeBoard(DEFAULT_WIDTH, DEFAULT_HEIGHT),
   isFirstRender: true,
   neighbours: calculationCoordinatesNeighboringSquares(
@@ -71,6 +78,7 @@ const initialState: State = {
   width: 50,
   height: 30,
   textInfo: 0,
+  historyInfo: "",
   activeSizeButton: "50x30",
   gameAction: "Pause",
   hashCode: [],
@@ -182,6 +190,20 @@ const rootReducer = (state: State = initialState, action: Actions): State => {
     }
     case "GAME_OVER": {
       return { ...state, gameAction: "Pause", textInfo: "GameOver" };
+    }
+    case "LOADING_HISTORY": {
+      return { ...state, loadingHistory: true };
+    }
+    case "GET_HISTORY_LIST": {
+      const { payload } = action;
+      if (typeof payload === "undefined") {
+        return state;
+      }
+      return {
+        ...state,
+        loadingHistory: false,
+        historyInfo: payload.data.join(","),
+      };
     }
     default: {
       return state;
