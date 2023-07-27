@@ -40,6 +40,7 @@ export const Container = () => {
   const [activeActionsButton, setActiveActionsButton] =
     useState<string>("Pause");
   const [speed, setSpeed] = useState<number>(DEFAULT_SPEED);
+  const [percent, setPercent] = useState<number>(0);
   const handleSetBoardSize = (
     event: React.SyntheticEvent<HTMLButtonElement>
   ) => {
@@ -53,12 +54,10 @@ export const Container = () => {
     setActiveSizeButton(event.target.name);
   };
   const handleClear = (event: React.SyntheticEvent<HTMLButtonElement>) => {
-    if (currentGameAction === "Clear") {
-      return;
-    }
     setInfoField("Clear");
     setCurrentGameAction("Clear");
     setActiveActionsButton((event.target as HTMLButtonElement).name);
+    setPercent(0);
   };
   const handleRun = (event: React.SyntheticEvent<HTMLButtonElement>) => {
     if (currentGameAction === "Run") {
@@ -91,6 +90,19 @@ export const Container = () => {
   };
   const handleResetSpeed = () => {
     setSpeed(DEFAULT_SPEED);
+  };
+
+  const handleIncreasePercent = () => {
+    if (currentGameAction === "Run") {
+      return;
+    }
+    setPercent(30);
+  };
+  const handleDecreasePercent = () => {
+    if (currentGameAction === "Run") {
+      return;
+    }
+    setPercent(10);
   };
 
   const [infoField, setInfoField] = useState<string | number>(0);
@@ -169,6 +181,29 @@ export const Container = () => {
           Обычно
         </Button>
       </div>
+      <div>
+        <h2 style={{ textAlign: "center" }} data-testid="percent-title">
+          Процент заполненности: {percent}
+        </h2>
+        <div style={{ textAlign: "center" }}>
+          <Button
+            onClick={handleIncreasePercent}
+            name="increase-speed"
+            data-testid="btn-30-percent"
+            className={30 === percent ? "active" : ""}
+          >
+            30
+          </Button>
+          <Button
+            onClick={handleDecreasePercent}
+            name="decrease-speed"
+            data-testid="btn-10-percent"
+            className={10 === percent ? "active" : ""}
+          >
+            10
+          </Button>
+        </div>
+      </div>
       <br />
       <div
         style={{ color: "white", fontSize: 24 }}
@@ -183,6 +218,7 @@ export const Container = () => {
         handleGameOver={handleGameOver}
         currentGameAction={currentGameAction}
         speed={speed}
+        persent={percent}
       />
     </div>
   );

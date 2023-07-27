@@ -20,6 +20,7 @@ type FieldProps = {
   handleGameOver: () => void;
   currentGameAction: eventButtonsType;
   speed: number;
+  persent: number;
 };
 export type NeighbourPosition =
   | "top"
@@ -42,6 +43,7 @@ const Board: FunctionComponent<FieldProps> = memo(
     handleGameOver,
     currentGameAction,
     speed,
+    persent,
   }: FieldProps) => {
     const squareSize = 10;
     const fieldW = width * squareSize;
@@ -112,6 +114,27 @@ const Board: FunctionComponent<FieldProps> = memo(
       }
     }, [currentGameAction, speed]);
 
+    useEffect(() => {
+      const countFillSquare = (width * height * persent) / 100;
+      const randomTargetSquare: number[] = [];
+      for (let i = 0; i < countFillSquare; i++) {
+        const random = (): number => {
+          const val = Math.floor(Math.random() * (width * height) + 1);
+          if (randomTargetSquare.includes(val)) {
+            return random();
+          }
+          return val;
+        };
+        randomTargetSquare.push(random());
+      }
+
+      setBoard(
+        Array.from({ length: width * height }).map((square, index) => {
+          return randomTargetSquare.includes(index);
+        })
+      );
+    }, [persent]);
+
     const handleClickSquare = (index: number, active: boolean) => {
       getSquareNumber(index);
       setBoard((prev) => {
@@ -150,7 +173,8 @@ const Board: FunctionComponent<FieldProps> = memo(
       prevProps.currentGameAction === nextProps.currentGameAction &&
       prevProps.width === nextProps.width &&
       prevProps.height === nextProps.height &&
-      prevProps.speed === nextProps.speed
+      prevProps.speed === nextProps.speed &&
+      prevProps.persent === nextProps.persent
     );
   }
 );

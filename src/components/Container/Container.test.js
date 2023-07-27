@@ -141,4 +141,49 @@ describe("Container", () => {
       /Задержка: 300/
     );
   });
+
+  it("render fill percent buttons", () => {
+    render(<Container />);
+
+    expect(screen.getByTestId("btn-60-percent")).toBeInTheDocument();
+    expect(screen.getByTestId("btn-30-percent")).toBeInTheDocument();
+  });
+
+  it("click percent buttons", () => {
+    render(<Container />);
+
+    fireEvent.click(screen.getByTestId("btn-10-percent"));
+    expect(screen.getByTestId("percent-title")).toHaveTextContent(
+      /Процент заполненности: 10/
+    );
+
+    fireEvent.click(screen.getByTestId("btn-30-percent"));
+    expect(screen.getByTestId("percent-title")).toHaveTextContent(
+      /Процент заполненности: 30/
+    );
+  });
+
+  it("random fill square board 30 percent", () => {
+    const { container } = render(<Container />);
+
+    fireEvent.click(screen.getByTestId("btn-30-percent"));
+
+    const allSquare = container.querySelectorAll(".square").length;
+    const activeSquare = container.querySelectorAll(".square.active").length;
+
+    expect((activeSquare / allSquare) * 100).toBeLessThanOrEqual(30);
+    expect((activeSquare / allSquare) * 100).toBeGreaterThanOrEqual(29);
+  });
+
+  it("random fill square board 10 percent", () => {
+    const { container } = render(<Container />);
+
+    fireEvent.click(screen.getByTestId("btn-10-percent"));
+
+    const allSquare = container.querySelectorAll(".square").length;
+    const activeSquare = container.querySelectorAll(".square.active").length;
+
+    expect((activeSquare / allSquare) * 100).toBeLessThanOrEqual(10);
+    expect((activeSquare / allSquare) * 100).toBeGreaterThanOrEqual(9);
+  });
 });
