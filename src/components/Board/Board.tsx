@@ -19,6 +19,7 @@ type FieldProps = {
   getSquareNumber: (number: number) => void;
   handleGameOver: () => void;
   currentGameAction: eventButtonsType;
+  speed: number;
 };
 export type NeighbourPosition =
   | "top"
@@ -40,6 +41,7 @@ const Board: FunctionComponent<FieldProps> = memo(
     getSquareNumber,
     handleGameOver,
     currentGameAction,
+    speed,
   }: FieldProps) => {
     const squareSize = 10;
     const fieldW = width * squareSize;
@@ -54,6 +56,9 @@ const Board: FunctionComponent<FieldProps> = memo(
     const [neighbours, setNeighbours] = useState<Neighbour[]>([]);
     const [intervalId, setIntervalId] = useState<NodeJS.Timer | number>(0);
     const [arraysHash, setArraysHash] = useState<number[]>([]);
+
+    const prevSpeedRef = useRef<number>(300);
+
     useLayoutEffect(() => {
       setBoard(createInitialBoard);
       setNeighbours(() =>
@@ -66,6 +71,9 @@ const Board: FunctionComponent<FieldProps> = memo(
         return;
       }
       if (currentGameAction === "Run") {
+        if (intervalId) {
+          clearInterval(intervalId);
+        }
         setArraysHash([hashcode(board)]);
         const interval = setInterval(() => {
           setBoard((prevBoard) => {
@@ -88,7 +96,7 @@ const Board: FunctionComponent<FieldProps> = memo(
             });
             return result;
           });
-        }, 300);
+        }, speed);
         setIntervalId(interval);
         return;
       }
@@ -102,7 +110,7 @@ const Board: FunctionComponent<FieldProps> = memo(
         setBoard(createInitialBoard);
         return;
       }
-    }, [currentGameAction]);
+    }, [currentGameAction, speed]);
 
     const handleClickSquare = (index: number, active: boolean) => {
       getSquareNumber(index);
@@ -141,7 +149,8 @@ const Board: FunctionComponent<FieldProps> = memo(
     return (
       prevProps.currentGameAction === nextProps.currentGameAction &&
       prevProps.width === nextProps.width &&
-      prevProps.height === nextProps.height
+      prevProps.height === nextProps.height &&
+      prevProps.speed === nextProps.speed
     );
   }
 );

@@ -8,5 +8,21 @@
   color: white;
   &.active {
     background: #ffffff ;
+    animation: changeColor .3s forwards;
+  }
+}
+
+
+@keyframes changeColor {
+  0% {
+    background-color: #000000;
+
+  }
+  50% {
+    background-color: #061c8c;
+  }
+  100% {
+    background-color: #ffffff;
+
   }
 }

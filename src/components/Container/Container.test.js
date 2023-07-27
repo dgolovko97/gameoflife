@@ -111,4 +111,34 @@ describe("Container", () => {
       );
     }, 1500);
   });
+
+  it("render speed button", () => {
+    render(<Container />);
+
+    expect(screen.getByTestId("btn-increase-speed")).toBeInTheDocument();
+    expect(screen.getByTestId("btn-decrease-speed")).toBeInTheDocument();
+    expect(screen.getByTestId("btn-reset-speed")).toBeInTheDocument();
+  });
+
+  it("click speed button", () => {
+    render(<Container />);
+
+    expect(screen.getByTestId("speed-title")).toHaveTextContent(
+      /Задержка: 300/
+    );
+    fireEvent.click(screen.getByTestId("btn-increase-speed"));
+    expect(screen.getByTestId("speed-title")).toHaveTextContent(
+      /Задержка: 100/
+    );
+
+    fireEvent.click(screen.getByTestId("btn-decrease-speed"));
+    expect(screen.getByTestId("speed-title")).toHaveTextContent(
+      /Задержка: 1000/
+    );
+
+    fireEvent.click(screen.getByTestId("btn-reset-speed"));
+    expect(screen.getByTestId("speed-title")).toHaveTextContent(
+      /Задержка: 300/
+    );
+  });
 });

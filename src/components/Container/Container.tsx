@@ -10,6 +10,7 @@ type boardSizeType = {
 };
 type sizeButtonsType = boardSizeType & { name: string };
 export type eventButtonsType = "Run" | "Pause" | "Clear" | "End";
+const DEFAULT_SPEED = 300;
 export const Container = () => {
   const sizeButtons: sizeButtonsType[] = [
     {
@@ -38,6 +39,7 @@ export const Container = () => {
     useState<sizeButtonsType["name"]>("50x30");
   const [activeActionsButton, setActiveActionsButton] =
     useState<string>("Pause");
+  const [speed, setSpeed] = useState<number>(DEFAULT_SPEED);
   const handleSetBoardSize = (
     event: React.SyntheticEvent<HTMLButtonElement>
   ) => {
@@ -80,6 +82,15 @@ export const Container = () => {
     setCurrentGameAction("Pause");
     setActiveActionsButton("Pause");
     setInfoField("Game Over :(");
+  };
+  const handleIncreaseSpeed = () => {
+    setSpeed(100);
+  };
+  const handleDecreaseSpeed = () => {
+    setSpeed(1000);
+  };
+  const handleResetSpeed = () => {
+    setSpeed(DEFAULT_SPEED);
   };
 
   const [infoField, setInfoField] = useState<string | number>(0);
@@ -129,6 +140,36 @@ export const Container = () => {
         </Button>
       </div>
       <br />
+      <div>
+        <h2 style={{ textAlign: "center" }} data-testid="speed-title">
+          Задержка: {speed}
+        </h2>
+        <Button
+          onClick={handleIncreaseSpeed}
+          name="increase-speed"
+          data-testid="btn-increase-speed"
+          className={100 === speed ? "active" : ""}
+        >
+          Быстро
+        </Button>
+        <Button
+          onClick={handleDecreaseSpeed}
+          name="decrease-speed"
+          data-testid="btn-decrease-speed"
+          className={1000 === speed ? "active" : ""}
+        >
+          Медленно
+        </Button>
+        <Button
+          onClick={handleResetSpeed}
+          name="reset-speed"
+          data-testid="btn-reset-speed"
+          className={DEFAULT_SPEED === speed ? "active" : ""}
+        >
+          Обычно
+        </Button>
+      </div>
+      <br />
       <div
         style={{ color: "white", fontSize: 24 }}
         data-testid="numberfield-element"
@@ -141,6 +182,7 @@ export const Container = () => {
         getSquareNumber={setInfoField}
         handleGameOver={handleGameOver}
         currentGameAction={currentGameAction}
+        speed={speed}
       />
     </div>
   );
